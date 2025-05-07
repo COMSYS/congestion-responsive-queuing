@@ -1,0 +1,136 @@
+{
+    "TESTBED": {
+        "DEVICE_IP": {
+            "CLIENT": "10.213.60.113",
+            "BOTTLE": "10.213.60.114",
+            "LOAD1": "10.213.60.115",
+            "LOAD2": "10.213.60.116"
+        },
+        "LOCAL_IP":{
+            "CLIENT": "10.11.12.113",
+            "BOTTLE": "10.11.12.114",
+            "LOAD1": "10.11.12.115",
+            "LOAD2": "10.11.12.116"
+        },
+        "INGRESS_DEVICE": "eno1",
+        "EGRESS_DEVICE": "eno1",
+        "CLIENT_DEVICE": "eno2",
+        "FIRST_IFB": "ifb0",
+        "SECOND_IFB": "ifb1",
+        "USERNAME": "test",
+        "KEY_FILE": "/FULL/PATH/TO/YOUR/private-key"
+    },
+    "PARAMETERS":{
+        "STANDARD_QUEUE": "2",
+        "RESPONSIVE_QUEUE": "1",
+        "BOTH_UNCLASSIFIED" : "0",
+        "BOTH_RESPONSIVE": "1",
+        "BOTH_UNRESPONSIVE": "2",
+        "ECN_RESP_LOSS_UNCLASS": "3",
+        "ECN_RESP_LOSS_UNRESP" : "4",
+        "ECN_UNRESP_LOSS_UNCLASS": "5",
+        "ECN_UNRESP_LOSS_RESP" : "6",
+        "ECN_UNCLASS_LOSS_UNRESP": "7",
+        "ECN_UNCLASS_LOSS_RESP": "8",
+        "DEFAULT_ID": "9"
+    },
+    "ORCHESTRATION": {
+        "RESULT_PATH": "/PATH/TO/RESULTS/FOLDER/",
+        "TRAFFIC_FILES_PATH": "/PATH/WHERE/TRAFFIC/FILES/ARE/",
+        "CERTFOLDER_PATH": "/PATH/TO/CERTS/",
+        "LOCAL_OUTPUT_PATH": "/PATH/TO/INTERMEDIATE/FILES/ON/SERVER_CLIENT/",
+        "LOCAL_TMP_PATH": "/PATH/TO/TMP/FOLDER/ON/SERVER_CLIENT/",
+        "TC_VIZ_PATH": "/PATH/TO/TCVIZ/INSTALL/",
+        "STACK_PATHS": {
+            "TCP": "/PATH/TO/TCP/STACK_EXECUTABLE",
+            "PICOQUIC": "/PATH/TO/PICOQUIC/STACK_EXECUTABLE"
+        },
+        "ITERATIONS": 1,
+        "OVERALL_NAME": "TEMPLATE-TEST",
+        "load_qlog_data": true
+    },
+    "EXPERIMENTS": [
+        {
+            "QUEUE_SIZE_BDP": 1.0,
+            "STANDARD_AQM": "CODEL_ECN_BAD",
+            "RESPONSIVE_AQM": "CODEL_ECN_GOOD",
+            "MULTICLASS_AQM_DEPLOY": true,
+            "CLASSIFIER_DEPLOY": true,
+            "RESPONSIVENESS_TEST": "WITHOUT_GRACE_MAX_NODELETE",
+            "BW": 1000,
+            "BW_GOOD": 500,
+            "BW_BAD": 500,
+            "RTT": 5,
+            "WATCHDOG_TIMEOUT": 900,
+            "BACKGROUND": {
+                "SERVER_1": true,
+                "SERVER_1_PORT_START": 21000,
+                "SERVER_1_FLOWS": [
+                    {
+                        "BW": 200,
+                        "START_DELAY": 0
+                    }
+                ],
+                "SERVER_2": false,
+                "SERVER_2_PORT_START": 22000,
+                "SERVER_2_FLOWS": [
+                    {
+                        "BW": 200,
+                        "START_DELAY": 0
+                    }
+                ]
+            },
+            "SERVER_1_DEPLOY": true,
+            "SERVER_1_PORT_START": 23000,
+            "SERVER_1_CONFIGS": [{
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "PICOQUIC",
+                "FILESIZE": 250
+            }],
+            "SERVER_2_DEPLOY": true,
+            "SERVER_2_PORT_START": 24000,
+            "SERVER_2_CONFIGS": [{
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "TCP",
+                "BIDIRECTIONAL": "1",
+                "FILESIZE": 250
+            },{
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "PICOQUIC",
+                "FILESIZE": 250
+            }],
+            "CLIENT_CONFIGS": [{
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "PICOQUIC",
+                "SPIN": "ON",
+                "FILESIZE": 250,
+                "START_DELAY": 0,
+                "SERVER_MACHINE": 1,
+                "SERVER_APP": 0
+            },
+            {
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "TCP",
+                "BIDIRECTIONAL": "1",
+                "FILESIZE": 250,
+                "START_DELAY": 0,
+                "SERVER_MACHINE": 2,
+                "SERVER_APP": 0
+            },{
+                "CC": "CUBIC",
+                "ECN": "ECT_1",
+                "STACK": "PICOQUIC",
+                "SPIN": "ON",
+                "FILESIZE": 250,
+                "START_DELAY": 0,
+                "SERVER_MACHINE": 2,
+                "SERVER_APP": 1
+            }]
+        }
+    ]    
+}
